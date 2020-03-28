@@ -25,7 +25,7 @@ services:
       - dbdata:/var/lib/mysql
     environment:
       # - MYSQL_DATABASE=world
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root123$
     working_dir: /lms
 
 volumes:
