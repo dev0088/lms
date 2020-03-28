@@ -1,0 +1,17 @@
+{
+  "socketURL": "",
+  "dirPath": "",
+  "homePage": "",
+  "socketMessageEvent": "RTCMultiConnection-Message",
+  "socketCustomEvent": "RTCMultiConnection-Custom-Message",
+  "port": "9001",
+  "enableLogs": "false",
+  "autoRebootServerOnFailure": "false",
+  "isUseHTTPs": "true",
+  "sslKey": "C:/xampp/htdocs/lms/ws/ssl/key.pem",
+  "sslCert": "C:/xampp/htdocs/lms/ws/ssl/cert.pem",
+  "sslCabundle": "",
+  "enableAdmin": "false",
+  "adminUserName": "username",
+  "adminPassword": "password"
+}
