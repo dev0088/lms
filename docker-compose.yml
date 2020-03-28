@@ -3,11 +3,15 @@ version: "3.7"
 services:
   php:
     image: vultr-php
+    build:
+      context: ./php
     volumes:
       - ./:/lms
     working_dir: /lms
   web:
     image: vultr-nginx
+    build:
+      context: ./nginx
     volumes:
       - ./:/lms
     depends_on:
