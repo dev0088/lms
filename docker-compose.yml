@@ -1,83 +1,28 @@
 version: "3.7"
 
 services:
-  postgresdb:
-    image: postgres:12-alpine
-    container_name: postgresdb
-    restart: always
-    hostname: db
-    environment:
-      POSTGRES_DB: explorer
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+  php:
+    image: vultr-php
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      services-network:
-        aliases:
-          - postgresdb
-
-  app:
-    container_name: explorer
-    restart: always
+      - ./:/lms
+    working_dir: /lms
+  web:
+    image: vultr-nginx
+    volumes:
+      - ./:/lms
     depends_on:
-      - postgresdb
-    links:
-      - postgresdb:postgresdb
-    build:
-      context: ./
-      dockerfile: ./Dockerfile
-    volumes:
-      - './:/explorer:Z'
+      - php
     ports:
-      - "3000:3000"
-    # env_file: .env
+      - 80:80
+  mysql:
+    image: mysql:5.7.21
+    volumes:
+      - ./:/lms
+      - dbdata:/var/lib/mysql
     environment:
-      POSTGRES_DB: explorer
-      DATABASE_NAME: explorer
-      DATABASE_USER_NAME: postgres
-      DATABASE_PASSWORD: postgres
-      DATABASE_HOST: postgresdb
-      DATABASE_PORT: 5432
-      ADMIN_EMAIL: ivanov@gmail.com
-      ADMIN_PASSWORD: 123qweasd
-      AWS_ACCESS_KEY_ID: AKIASRC7TRBPJAHAXFWK
-      AWS_S3_BUCKET: backpack-staging-explorer-trekview-org
-      AWS_S3_BUCKET_REGION: eu-west-2
-      AWS_SECRET_ACCESS_KEY: HU6GWUcURyrNhea8s2fhdrx4IHA0jONp1I3wGMN2
-      DEVISE_SENDER_EMAIL_ADDRESS: staging@mg.trekview.org
-      DEVISE_SENDER_NAME: 'Trek View Staging'
-      FOG_DIRECTORY: backpack-staging-explorer-trekview-org
-      FOG_PROVIDER: AWS
-      FOG_REGION: eu-west-2
-      GOOGLE_ANALYTICS_KEY: UA-136706582-3
-      GOOGLE_MAPS_API_KEY: AIzaSyCgi0YaLFIcW7PX4ttlQ8ZZhuVw-xk5a40
-      LANG: en_US.UTF-8
-      MAILCHIMP_AUDIENCE_ID: df129eff24
-      RACK_ENV: staging
-      RAILS_ENV: development
-      SITE_URL: localhost:3000
-      DISALLOW_ALL_WEB_CRAWLERS: 1
-      MAILCHIMP_API_KEY: a8c9cd3ea520d0f8eba2099c3df0706a-us20
-      MAILGUN_DOMAIN: mg.trekview.org
-      MAILGUN_SMTP_LOGIN: staging@mg.trekview.org
-      MAILGUN_SMTP_PASSWORD: 6e1bbf20c1b47ba32878af36bc76bfdc-816b23ef-aa95db1b
-      MAILGUN_SMTP_PORT: 587
-      MAILGUN_SMTP_SERVER: smtp.mailgun.org
-
-    networks:
-      services-network:
-        aliases:
-          - explorer
-    # command: bash -c "bundle exec rails db:migrate && bundle exec rails s -b 0.0.0.0"
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
+      # - MYSQL_DATABASE=world
+      - MYSQL_ROOT_PASSWORD=root
+    working_dir: /lms
 
 volumes:
-  postgres-data:
-
-networks:
-  services-network:
-    name: services-network
-    driver: bridge
+  dbdata:
