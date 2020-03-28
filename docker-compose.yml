@@ -2,22 +2,33 @@ version: "3.7"
 
 services:
   php:
-    image: vultr-php
+    image: lms-php
     build:
       context: ./php
     volumes:
       - ./:/lms
     working_dir: /lms
-  web:
-    image: vultr-nginx
-    build:
-      context: ./nginx
-    volumes:
-      - ./:/lms
+
+  nginx-letsencrypt:
+    image: linuxserver/letsencrypt
+    container_name: lms-nginx-letsencrypt
+     volumes:
+      - ./nginx/letsencrypt:/config
+      - ./nginx/default.conf /etc/nginx/conf.d/default.conf
     depends_on:
       - php
     ports:
       - 80:80
+      - 443:443
+    environment:
+      - EMAIL=ninjadev999@gmail.com
+      - URL=vultrwin.com
+      - SUBDOMAINS=www
+      - VALIDATION=http
+      - TZ=UTC
+      - PUID=0
+      - PGID=0
+
   mysql:
     image: mysql:5.7.21
     volumes:
