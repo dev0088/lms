@@ -20,7 +20,7 @@ services:
         aliases:
           - nginx
     links:
-      - postgresdb:postgresdb
+      - mysql:mysql
   nginx:
     image: nginx:1.15-alpine
     restart: unless-stopped
