@@ -13,6 +13,10 @@ File Encoding         : 65001
 Date: 2020-03-25 23:17:35
 */
 
+CREATE DATABASE IF NOT EXISTS `video_chat_db` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `video_chat_db`;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------

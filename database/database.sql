@@ -13,6 +13,10 @@ File Encoding         : 65001
 Date: 2020-03-25 23:16:32
 */
 
+CREATE DATABASE IF NOT EXISTS `database` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `database`;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
