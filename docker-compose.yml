@@ -18,9 +18,9 @@ services:
     networks:
       services-network:
         aliases:
-          - nginx
+          - nginx-addr
     links:
-      - mysql:mysql
+      - mysql:mysql-addr
   nginx:
     image: nginx:1.15-alpine
     restart: unless-stopped
@@ -54,12 +54,12 @@ services:
       # - MYSQL_DATABASE=world
       - MYSQL_ROOT_PASSWORD=root
     working_dir: /lms
-    depends_on: 
-      - php
+    # depends_on: 
+    #   - php
     networks:
       services-network:
         aliases:
-          - mysql
+          - mysql-addr
 
 volumes:
   dbdata:
