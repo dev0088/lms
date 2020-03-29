@@ -16,6 +16,8 @@ services:
       - ./webservice/nginx:/etc/nginx/conf.d
       - ./webservice/certbot/conf:/etc/letsencrypt
       - ./webservice/certbot/www:/var/www/certbot
+      - ./lms:/var/www/html/lms
+    # command: "cp -rf /data/lms /var/www/lms"
     ports:
       - "80:80"
       - "443:443"
