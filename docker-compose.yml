@@ -67,5 +67,12 @@ services:
       - ./:/lms
       - dbdata:/var/lib/mysql
 
+  stun:
+    image: boldt/coturn
+    container_name: coturn
+    restart: always
+    ports:
+      - 3478:3478/tcp
+      - 3478:3478/udp
 volumes:
   dbdata:
