@@ -10,7 +10,7 @@ services:
   composer:
     image: "composer"
     volumes:
-        - "./web/app:/app"
+        - "./lms:/lms"
     command: install
   node:
     image: node:8.15.0
