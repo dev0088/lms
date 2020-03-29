@@ -49,7 +49,7 @@ docker-start: #init
 
 docker-stop:
 	@docker-compose down -v
-	@yes | docker system purne
+	@yes | docker system prune
 	# @make clean
 
 gen-certs:
