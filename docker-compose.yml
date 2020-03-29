@@ -3,17 +3,18 @@ version: "3.7"
 services:
   lms:
     image: lms-php
-    build:
-      context: ./lms
     volumes:
       - ./:/lms
     working_dir: /lms
   php:
-    image: nanoninja/php-fpm:${PHP_VERSION}
+    build:
+      context: ./php
     restart: always
     volumes:
         # - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
         - "./lms:/var/www/html"
+    port:
+      - 9000:9000
   nginx:
     image: nginx:1.15-alpine
     restart: unless-stopped
@@ -46,6 +47,8 @@ services:
       # - MYSQL_DATABASE=world
       - MYSQL_ROOT_PASSWORD=root
     working_dir: /lms
+    depends_on: 
+      - php
 
 volumes:
   dbdata:
