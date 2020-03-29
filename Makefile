@@ -3,8 +3,6 @@
 include .env
 
 # MySQL
-MYSQL_DUMPS_DIR=data/db/dumps
-
 help:
 	@echo ""
 	@echo "usage: make COMMAND"
@@ -23,12 +21,12 @@ help:
 	@echo "  phpmd               Analyse the API with PHP Mess Detector"
 	@echo "  test                Test application"
 
-init:
-	@$(shell cp -n $(shell pwd)/web/app/composer.json.dist $(shell pwd)/web/app/composer.json 2> /dev/null)
+# init:
+# 	@$(shell cp -n $(shell pwd)/web/app/composer.json.dist $(shell pwd)/web/app/composer.json 2> /dev/null)
 
-apidoc:
-	@docker-compose exec -T php php -d memory_limit=256M -d xdebug.profiler_enable=0 ./app/vendor/bin/apigen generate app/src --destination app/doc
-	@make resetOwner
+# apidoc:
+# 	@docker-compose exec -T php php -d memory_limit=256M -d xdebug.profiler_enable=0 ./app/vendor/bin/apigen generate app/src --destination app/doc
+# 	@make resetOwner
 
 clean:
 	@rm -Rf data/db/mysql/*
@@ -39,22 +37,24 @@ clean:
 	@rm -Rf web/app/report
 	@rm -Rf etc/ssl/*
 
-code-sniff:
-	@echo "Checking the standard code..."
-	@docker-compose exec -T php ./app/vendor/bin/phpcs -v --standard=PSR2 app/src
+# code-sniff:
+# 	@echo "Checking the standard code..."
+# 	@docker-compose exec -T php ./app/vendor/bin/phpcs -v --standard=PSR2 app/src
 
 composer-up:
 	@docker run --rm -v $(shell pwd)/web/app:/app composer update
 
-docker-start: init
+docker-start: #init
 	docker-compose up -d
 
 docker-stop:
 	@docker-compose down -v
-	@make clean
+	@yes | docker system purne
+	# @make clean
 
 gen-certs:
-	@docker run --rm -v $(shell pwd)/etc/ssl:/certificates -e "SERVER=$(NGINX_HOST)" jacoelho/generate-certificate
+	@./webservice/init-letsencrypt.sh -d $(DOMAIN) -s $(SUBDOMAIN)
+	# @docker run --rm -v $(shell pwd)/etc/ssl:/certificates -e "SERVER=$(NGINX_HOST)" jacoelho/generate-certificate
 
 logs:
 	@docker-compose logs -f
@@ -66,6 +66,12 @@ mysql-dump:
 
 mysql-restore:
 	@docker exec -i $(shell docker-compose ps -q mysqldb) mysql -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" < $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
+
+mysql-init:
+	# database.sql
+	@docker exec -i $(shell docker-compose ps -q mysqldb) mysql -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" < $(MYSQL_INIT_DIR)/database.sql 2>/dev/null
+	# video_chat_db.sql
+	@docker exec -i $(shell docker-compose ps -q mysqldb) mysql -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" < $(MYSQL_INIT_DIR)/video_chat_db.sql 2>/dev/null
 
 phpmd:
 	@docker-compose exec -T php \
