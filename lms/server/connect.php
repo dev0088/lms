@@ -4,7 +4,7 @@ $servername = 'localhost';
 $database = 'video_chat_db';
 $database1 = "database";
 $username = 'root';
-$password = 'root123$';
+$password = 'root1234';
 $charset = 'utf8mb4';
 $dbPrefix = 'lsv_';
 
