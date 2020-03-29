@@ -9,7 +9,7 @@ docker-compose stop
 docker-compose down
 
 # Re-generate certificates with domain
-yes | ./webservice/init-letsencrypt.sh
+./webservice/init-letsencrypt.sh
 
 # Run dockers as daemon
 docker-compose up -d --build
