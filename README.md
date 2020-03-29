@@ -1,3 +1,8 @@
+* Generate certificates with certbot and domain
+  ```bash
+    $ ./webservice/init-letsencrypt.sh
+  ```
+
 * Deployment
 
   ```bash
