@@ -16,7 +16,7 @@ services:
       - 9001:9001
     volumes:
       - ./lms/ws/server:/app/server
-      - ./webservice/certbot/conf/live/vultrwins.com:/app/ssl
+      - ./webservice/certbot/conf/:/app/ssl
     working_dir: /app/server
     command: >
       sh -c "npm install -g pm2 && npm install && pm2-runtime server.js --watch"
