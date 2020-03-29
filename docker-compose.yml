@@ -1,14 +1,19 @@
 version: "3.7"
 
 services:
-  php:
+  lms:
     image: lms-php
     build:
-      context: ./php
+      context: ./lms
     volumes:
       - ./:/lms
     working_dir: /lms
-
+  php:
+    image: nanoninja/php-fpm:${PHP_VERSION}
+    restart: always
+    volumes:
+        # - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+        - "./lms:/var/www/html"
   nginx:
     image: nginx:1.15-alpine
     restart: unless-stopped
@@ -16,12 +21,15 @@ services:
       - ./webservice/nginx:/etc/nginx/conf.d
       - ./webservice/certbot/conf:/etc/letsencrypt
       - ./webservice/certbot/www:/var/www/certbot
-      - ./lms:/var/www/html/lms
+      - ./lms:/var/www/html
     # command: "cp -rf /data/lms /var/www/lms"
     ports:
       - "80:80"
       - "443:443"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    depends_on:
+      - php
+      - mysql
   certbot:
     image: certbot/certbot
     restart: unless-stopped
@@ -29,7 +37,6 @@ services:
       - ./webservice/certbot/conf:/etc/letsencrypt
       - ./webservice/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
   mysql:
     image: mysql:5.7.21
     volumes:
