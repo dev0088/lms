@@ -13,7 +13,7 @@ services:
     volumes:
         # - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
         - "./lms:/var/www/html"
-    port:
+    ports:
       - 9000:9000
   nginx:
     image: nginx:1.15-alpine
