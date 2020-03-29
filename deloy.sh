@@ -8,11 +8,12 @@
 docker-compose stop
 docker-compose down
 
+# Re-generate certificates with domain
+yes | ./webservice/init-letsencrypt.sh
+
 # Run dockers as daemon
 docker-compose up -d --build
 
 # Remove caches
-yes | docker container prune
-yes | docker network prune
-yes | docker image prune
-yes | docker volume prune
+yes | docker system prune
+
