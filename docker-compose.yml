@@ -1,11 +1,11 @@
 version: "3.7"
 
 services:
-  lms:
-    image: lms-php
-    volumes:
-      - ./:/lms
-    working_dir: /lms
+  # lms:
+  #   image: lms-php
+  #   volumes:
+  #     - ./:/lms
+  #   working_dir: /lms
   php:
     build:
       context: ./php
