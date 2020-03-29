@@ -6,8 +6,12 @@ services:
     restart: always
     volumes:
       # - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - ./lms:/var/www/html
-
+      - ./lms:/var/www/php/lms
+  composer:
+    image: "composer"
+    volumes:
+        - "./web/app:/app"
+    command: install
   node:
     image: node:8.15.0
     container_name: "node8"
@@ -28,7 +32,7 @@ services:
       - ./webservice/nginx:/etc/nginx/conf.d
       - ./webservice/certbot/conf:/etc/letsencrypt
       - ./webservice/certbot/www:/var/www/certbot
-      - ./lms:/var/www/html
+      - ./lms:/var/www/php/lms
     # command: "cp -rf /data/lms /var/www/lms"
     ports:
       - "80:80"
