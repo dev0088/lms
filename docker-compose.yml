@@ -1,26 +1,13 @@
 version: "3.7"
 
 services:
-  # lms:
-  #   image: lms-php
-  #   volumes:
-  #     - ./:/lms
-  #   working_dir: /lms
   php:
-    build:
-      context: ./php
+    image: nanoninja/php-fpm:${PHP_VERSION}
     restart: always
     volumes:
-        # - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
-        - "./lms:/var/www/html"
-    ports:
-      - 9000:9000
-    networks:
-      services-network:
-        aliases:
-          - php-addr
-    links:
-      - mysql:mysql-addr
+      # - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "./lms:/var/www/html"
+
   nginx:
     image: nginx:1.15-alpine
     restart: unless-stopped
@@ -53,18 +40,9 @@ services:
     environment:
       # - MYSQL_DATABASE=world
       - MYSQL_ROOT_PASSWORD=root
-    working_dir: /lms
-    # depends_on: 
-    #   - php
-    networks:
-      services-network:
-        aliases:
-          - mysql-addr
+    # working_dir: /lms
+    depends_on: 
+      - php
 
 volumes:
   dbdata:
-
-networks:
-  services-network:
-    name: services-network
-    driver: bridge
