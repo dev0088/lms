@@ -18,7 +18,7 @@ services:
     networks:
       services-network:
         aliases:
-          - nginx-addr
+          - php-addr
     links:
       - mysql:mysql-addr
   nginx:
