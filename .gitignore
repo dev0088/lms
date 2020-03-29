@@ -1,3 +1,4 @@
 # OS or Editor folders
 .DS_Store
 dbdata
+lms/ws/server/node_modules/

@@ -6,7 +6,20 @@ services:
     restart: always
     volumes:
       # - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "./lms:/var/www/html"
+      - ./lms:/var/www/html
+
+  node:
+    image: node:8.15.0
+    container_name: "node8"
+    restart: unless-stopped
+    ports:
+      - 9001:9001
+    volumes:
+      - ./lms/ws/server:/app/server
+      - ./webservice/certbot/conf/live/vultrwins.com:/app/ssl
+    working_dir: /app/server
+    command: >
+      sh -c "npm install -g pm2 && npm install && pm2-runtime server.js --watch"
 
   nginx:
     image: nginx:1.15-alpine
