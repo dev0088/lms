@@ -7,11 +7,17 @@ services:
     volumes:
       # - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
       - ./lms:/var/www/php/lms
+    networks:
+      - app-network
+
   composer:
     image: "composer"
     volumes:
         - "./lms:/lms"
     command: install
+    networks:
+      - app-network
+
   node:
     image: node:8.15.0
     container_name: "node8"
@@ -24,6 +30,8 @@ services:
     working_dir: /app/server
     command: >
       sh -c "npm install -g pm2 && npm install && pm2-runtime server.js --watch"
+    networks:
+      - app-network
 
   nginx:
     image: nginx:1.15-alpine
@@ -41,6 +49,8 @@ services:
     depends_on:
       - php
       - mysqldb
+    networks:
+      - app-network
 
   certbot:
     image: certbot/certbot
@@ -49,6 +59,8 @@ services:
       - ./webservice/certbot/conf:/etc/letsencrypt
       - ./webservice/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - app-network
 
   mysqldb:
     image: mysql:${MYSQL_VERSION}
@@ -66,6 +78,8 @@ services:
     volumes:
       - ./:/lms
       - dbdata:/var/lib/mysql
+    networks:
+      - app-network
 
   stun:
     image: boldt/coturn
@@ -74,5 +88,10 @@ services:
     ports:
       - 3478:3478/tcp
       - 3478:3478/udp
+
 volumes:
   dbdata:
+
+networks:
+  app-network:
+    driver: bridge
