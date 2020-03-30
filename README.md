@@ -39,13 +39,26 @@
 * Generate certificates with certbot and domain
   
   ```bash
-  $ ./webservice/init-letsencrypt.sh
+  $ make gen-certs
   ```
 
 * Deployment
 
   ```bash
-  $ ./deploy.sh 
+  $ make docker-start
+  ```
+
+* Stop service
+
+  ```bash
+  $ make docker-stop
+  ```
+
+* Setup database
+
+  ```bash
+  $ make docker-start
+  $ make mysql-init
   ```
 
 * References
